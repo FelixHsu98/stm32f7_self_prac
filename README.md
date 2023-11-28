@@ -1,1 +1,3 @@
-# stm32f7_self_practice
+# stm32f7 self-practice
+
+
