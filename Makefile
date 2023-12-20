@@ -2,7 +2,8 @@ K = kernel
 C_SOURCE = \
 	$K/startup.o \
 	$K/main.o \
-	$K/uart.o
+	$K/uart.o \
+	$K/proc.o
 S_SOURCE = \
 	$K/swtch.o \
 	$K/syscall1.o
