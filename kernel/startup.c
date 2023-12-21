@@ -32,7 +32,7 @@ __attribute__((naked, noreturn)) void _reset(void)
     *dst = *src;
   
   timerinit();
-  uartinit((struct uart *)USART1, 115200);
+  uartinit((struct uart *)USART3, 115200);
   main();
   for(;;);
 }

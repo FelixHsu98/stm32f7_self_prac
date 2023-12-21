@@ -22,7 +22,7 @@ uartinit(struct uart *up, uint32 baud)
       break;
     case USART3:
       *(RCC_APB1ENR) |= (1U << 18);
-      port = 'B', tx = 10, rx = 11, af = 7;
+      port = 'D', tx = 8, rx = 9, af = 7;
       break;
     case UART4:
       *(RCC_APB1ENR) |= (1U << 19);
@@ -66,13 +66,15 @@ uartputc(struct uart *up, uint8 c)
   while( !(up->ISR & (1U << 7)) ); // spin when TXE == 0
 }
 
+//uartwrite(struct uart *up, char *buf, uint32 len)
 void
-uartwrite(struct uart *up, char *buf, uint32 len)
+uartwrite(struct uart *up, char *buf)
 {
   char *c = buf;
-  uint32 i = 0;
+  //uint32 i = 0;
 
-  while(i++ < len){
+  //while(i++ < len){
+  while(*c){
     uartputc(up, *c);
     c++;
   }
