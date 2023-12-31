@@ -1,17 +1,10 @@
 typedef volatile uint32 reg_t;
 
-/* GPIO A memory layout */
+/* GPIOX memory layout */
 #define GPIOA		((reg_t) 0x40020000)
-//#define GPIOA_MODER	((reg_t *) GPIOA + 0x00)
-//#define GPIOA_OTYPER	((reg_t *) GPIOA + 0x04)
-//#define GPIOA_OSPEEDR	((reg_t *) GPIOA + 0x08)
-//#define GPIOA_PUPDR	((reg_t *) GPIOA + 0x0c)
-//#define GPIOA_IDR	((reg_t *) GPIOA + 0x10)
-//#define GPIOA_ODR	((reg_t *) GPIOA + 0x14)
-//#define GPIOA_BSRR	((reg_t *) GPIOA + 0x18)
-//#define GPIOA_LCKR	((reg_t *) GPIOA + 0x1c)
-//#define GPIOA_AFRL	((reg_t *) GPIOA + 0x20)
-//#define GPIOA_AFRH	((reg_t *) GPIOA + 0x24)
+
+#define GSHIFT(x)	((x - 'A') * 0x400) // move to right GPIO port
+#define GPIOX(x)	((reg_t) GPIOA + GSHIFT(x))
 
 /* RCC memory layout */
 #define RCC		((reg_t) 0x40023800)
@@ -26,16 +19,6 @@ typedef volatile uint32 reg_t;
 #define RCC_BDCR	((reg_t *) (RCC + 0x70))
 #define RCC_CSR		((reg_t *) (RCC + 0x74))
 
-/* GPIOx select */
-#define GSHIFT(x)	((x - 'A') * 0x400) // move to right GPIO port
-#define GPIOX(x)	((reg_t) GPIOA + GSHIFT(x))
-
-/* SysTick memory layout */
-#define SYS_CSR		((reg_t *) (0xE000E010))
-#define SYS_RVR		((reg_t *) (0xE000E014))
-#define SYS_CVR		((reg_t *) (0xE000E018))
-#define SYS_CALIB	((reg_t *) (0xE000E01C))
-
 /* USART layout */
 #define USART1		((reg_t) 0x40011000)
 #define USART2		((reg_t) 0x40004400)
@@ -46,4 +29,17 @@ typedef volatile uint32 reg_t;
 #define UART7		((reg_t) 0x40007800)
 #define UART8		((reg_t) 0x40007C00)
 
-#define FREQ		(16000000) // CPU clock
+#define FREQ		(16000000) // HSI clock
+/* This part are core perihperal registers*/
+/* System timer */
+#define SYS_CSR		((reg_t *) (0xE000E010))
+#define SYS_RVR		((reg_t *) (0xE000E014))
+#define SYS_CVR		((reg_t *) (0xE000E018))
+#define SYS_CALIB	((reg_t *) (0xE000E01C))
+/* System control block */
+#define SYS_ICSR	((reg_t *) (0xE000ED04))  // set interrupt pending
+#define SYS_SHPR1	((reg_t *) (0xE000ED18))  // set handler priority
+#define SYS_SHPR2	((reg_t *) (0xE000ED1C))
+#define SYS_SHPR3	((reg_t *) (0xE000ED20))
+#define PENDSVSET	((reg_t)   (1 << 28))	  // trigger PendSV bit
+#define PENDSVPRI	((reg_t)   (0x00FF0000))  // PendSV priority

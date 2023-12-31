@@ -11,19 +11,21 @@ _estack = ORIGIN(DTCM) + LENGTH(DTCM);
 SECTIONS{
   .vectors : { KEEP( *(.vectors) ) } > FLASH
   .text    : { *(.text) }            > FLASH
-  .rodata  : { *(.rodata*) }         > FLASH
+  .rodata  : { *(.rodata) }          > FLASH
 
-  .data    : {
+  .data    :
+  {
     _sdata = .;
-    *(.firstdata)
-    *(.data* SORT(.data.*))
+    *(.data)
     _edata = .;
-  } > SRAM AT >  FLASH
+  } > SRAM AT> FLASH
   _sidata = LOADADDR(.data);
 
-  .bss     : {
+  .bss     : 
+  {
     _sbss = .;
-    *(.bss* SORT(.bss.*) COMMON)
+    *(.bss)
+    *(COMMON)
     _ebss = .;
   } > SRAM
 

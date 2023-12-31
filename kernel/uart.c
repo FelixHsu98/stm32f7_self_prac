@@ -66,14 +66,11 @@ uartputc(struct uart *up, uint8 c)
   while( !(up->ISR & (1U << 7)) ); // spin when TXE == 0
 }
 
-//uartwrite(struct uart *up, char *buf, uint32 len)
 void
 uartwrite(struct uart *up, char *buf)
 {
   char *c = buf;
-  //uint32 i = 0;
 
-  //while(i++ < len){
   while(*c){
     uartputc(up, *c);
     c++;
