@@ -7,6 +7,8 @@
 
 extern uint32 _sticks;
 
+extern void timerinit(void);
+
 static int
 wait(uint32 period)
 {
@@ -27,13 +29,6 @@ wait(uint32 period)
 //  return 1;
 //}
 
-void
-task_init(void)
-{
-	uint32 empty[32];
-	task_init_env(empty+32);
-}
-
 void userproc1()
 {
   gpio_set_mode('B', 14, GPIO_MODE_OUTPUT); // PB14 is red LED
@@ -44,8 +39,7 @@ void userproc1()
     if(wait(1000)){
       gpio_write('B', 14, on);
       on = !on;
-      uartwrite((struct uart *)USART3, "process 1 continually running\r\n");
-      yield();
+      uartwrite((struct uart *)USART3, "Process 1: toggle LED\r\n");
     }
   }
 }
@@ -57,37 +51,33 @@ void userproc2()
 
   int on = 1;
   for(;;){
-    if(wait(1000)){
+    if(wait(2000)){
       gpio_write('B', 7, on);
       on = !on;
-      uartwrite((struct uart *)USART3, "process 2 continually running\r\n");
-      yield();
+      uartwrite((struct uart *)USART3, "Process 2: Now toggle LED\r\n");
     }
   }
 }
 
 int main()
 {
-  int idx = 0;
-  //uint32 *usersp[MAX_PROC_NUM];
-  uint32 userstack[MAX_PROC_NUM][USTACK_SIZE];
-
   // say hello to console
   uartwrite((struct uart *)USART3, "os starting...\r\n");
 
-  task_init();
+  procinit();
+  timerinit();
   uartwrite((struct uart *)USART3, "successfully load into kernel\r\n");
 
-  if(allocproc(userstack[idx], userproc1) == 0)
+  if(allocproc(userproc1) == 0)
     uartwrite((struct uart *)USART3, "proc1 alloc failed\r\n");
-  idx++;
 
-  if(allocproc(userstack[idx], userproc2) == 0)
+  if(allocproc(userproc2) == 0)
     uartwrite((struct uart *)USART3, "proc2 alloc failed\r\n");
 
   while(1){
     sched();
-    uartwrite((struct uart *)USART3, "switch back to kernel to prepare scheduling\r\n");
+    //uartwrite((struct uart *)USART3, "switch back to kernel to prepare scheduling\r\n");
+    uartwrite((struct uart *)USART3, "kernel: call sched\r\n");
   }
 
   return 0;
