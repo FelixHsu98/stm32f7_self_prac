@@ -51,4 +51,4 @@ flash-gdb:
 	openocd -f $(ICFG) -f $(BCFG)
 
 clean:
-	rm -f $K/*.o $K/*.asm *.elf *.bin
+	rm -f $K/*.o $K/*.asm *.elf *.bin *.swp $K/*.swp
